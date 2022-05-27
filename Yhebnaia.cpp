@@ -21,10 +21,21 @@ void division_into_words(string st, vector<string>& words, int& col) { // дел
     }
 }
 
+char down_reg(char letter) {
+    char NoRegister = letter;
+    if (letter >= 'А' && letter <= 'Я') {
+        int temp = letter - 'А';
+        NoRegister = temp + 'а';
+    }
+    return NoRegister;
+}
+
 void sort(vector<string>& words) { // сортировка пузырьком по алфавиту
     for (int i = 0; i < words.size(); i++) {
         for (int j = 0; j < words.size() - 1; j++) {
-            if (words[j][0] > words[j + 1][0]) {
+            char NoRegister1 = down_reg(words[j][0]);
+            char NoRegister2 = down_reg(words[j + 1][0]);
+            if (NoRegister1 > NoRegister2) {
                 string temp = words[j];
                 words[j] = words[j + 1];
                 words[j + 1] = temp;
