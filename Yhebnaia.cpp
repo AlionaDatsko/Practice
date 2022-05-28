@@ -1,10 +1,23 @@
 ﻿#include <iostream>
+#include <ctime>
 #include <fstream>
 #include <string>
 #include <Windows.h>
 #include <vector>
 
 using namespace std;
+
+void WordCount(vector<string>& words) {
+    int letters[33] = { 0 };
+    for (int i = 0; i < 32; i++) {
+        for (int j = 0; j < words.size(); j++) {
+            if (words[j][0] == (char)(i + (int)('А')) || words[j][0] == (char)(i + (int)('а'))) {
+                letters[i] += 1;
+            }
+        }
+        cout << "Слов на букву '" << (char)(i + (int)('А')) << "': " << letters[i] << endl;
+    }
+}
 
 void division_into_words(string st, vector<string>& words, int& col) { // делим строку по словам
     string word = "";
@@ -61,10 +74,15 @@ int main()
     }
     fin.close();     // закрываем файл
     division_into_words(st, words, col);
+    unsigned int start_time = clock(); // начальное время
     sort(words);
+    unsigned int end_time = clock(); // конечное время
+    unsigned int search_time = end_time - start_time; // искомое время
+    cout << "время: " << (double)search_time / (double)CLOCKS_PER_SEC << " сек";
     for (int i = 0; i < words.size(); i++) {
         cout << words[i] << endl;
     }
     cout << col;
+    WordCount(words);
     return 0;
 }
