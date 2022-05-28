@@ -7,15 +7,13 @@
 
 using namespace std;
 
-void WordCount(vector<string>& words) {
-    int letters[33] = { 0 };
+void WordCount(vector<string>& words, int* letters) {
     for (int i = 0; i < 32; i++) {
         for (int j = 0; j < words.size(); j++) {
             if (words[j][0] == (char)(i + (int)('А')) || words[j][0] == (char)(i + (int)('а'))) {
                 letters[i] += 1;
             }
         }
-        cout << "Слов на букву '" << (char)(i + (int)('А')) << "': " << letters[i] << endl;
     }
 }
 
@@ -57,6 +55,36 @@ void sort(vector<string>& words) { // сортировка пузырьком п
     }
 }
 
+void FileResult(vector<string>& words) {
+    ofstream fileOut("Result.txt"); // окрываем файл для записи
+    for (int i = 0; i < words.size() - 1; i++) {
+        char NoRegister1 = down_reg(words[i][0]);
+        char NoRegister2 = down_reg(words[i + 1][0]);
+        if (NoRegister1 == NoRegister2) {
+            fileOut << words[i] << " ";
+        }
+        else {
+            fileOut << words[i] << endl;
+        }
+    }
+    fileOut.close();
+}
+
+void FileAnalysis(vector<string>& words, int search_time, int col, string st) {
+    int letters[33] = { 0 };
+    ofstream fileOut("Analysis.txt"); // окрываем файл для записи
+    fileOut << st;
+    fileOut << "Вариант 13: кириллица, по алфавиту, по возрастанию, игнорировать числа, сортировка Пузырьком" << endl;
+    fileOut << "Колличество слов: " << col << endl;
+    fileOut << "время сортировки: " << (double)search_time / (double)CLOCKS_PER_SEC << " сек" << endl;
+    WordCount(words, letters);
+    fileOut << "Статистика (колличество слов на каждую букву алфавита:)" << endl;
+    for (int i = 0; i < 32; i++) {
+        fileOut << (char)(i + (int)('А')) << " : " << letters[i] << endl;
+    }
+    fileOut.close();
+}
+
 int main()
 {
     SetConsoleCP(1251);
@@ -78,11 +106,8 @@ int main()
     sort(words);
     unsigned int end_time = clock(); // конечное время
     unsigned int search_time = end_time - start_time; // искомое время
-    cout << "время: " << (double)search_time / (double)CLOCKS_PER_SEC << " сек";
-    for (int i = 0; i < words.size(); i++) {
-        cout << words[i] << endl;
-    }
-    cout << col;
-    WordCount(words);
+    FileResult(words);
+    FileAnalysis(words, search_time, col, st);
+    cout << "Программа завершена успешно, все данные сохранены в файлы Result и Analysis";
     return 0;
 }
