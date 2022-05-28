@@ -7,7 +7,7 @@
 
 using namespace std;
 
-void WordCount(vector<string>& words, int* letters) {
+void WordCount(vector<string>& words, int* letters) { // колличество слов
     for (int i = 0; i < 32; i++) {
         for (int j = 0; j < words.size(); j++) {
             if (words[j][0] == (char)(i + (int)('А')) || words[j][0] == (char)(i + (int)('а'))) {
@@ -32,7 +32,7 @@ void division_into_words(string st, vector<string>& words, int& col) { // дел
     }
 }
 
-char down_reg(char letter) {
+char down_reg(char letter) { //понижение регистра
     char NoRegister = letter;
     if (letter >= 'А' && letter <= 'Я') {
         int temp = letter - 'А';
@@ -55,7 +55,7 @@ void sort(vector<string>& words) { // сортировка пузырьком п
     }
 }
 
-void FileResult(vector<string>& words) {
+void FileResult(vector<string>& words) { // запись сортировки в файл
     ofstream fileOut("Result.txt"); // окрываем файл для записи
     for (int i = 0; i < words.size() - 1; i++) {
         char NoRegister1 = down_reg(words[i][0]);
@@ -67,10 +67,10 @@ void FileResult(vector<string>& words) {
             fileOut << words[i] << endl;
         }
     }
-    fileOut.close();
+    fileOut.close(); // закрываем файл
 }
 
-void FileAnalysis(vector<string>& words, int search_time, int col, string st) {
+void FileAnalysis(vector<string>& words, int search_time, int col, string st) { // запись анализа программы в файл
     int letters[33] = { 0 };
     ofstream fileOut("Analysis.txt"); // окрываем файл для записи
     fileOut << st;
@@ -82,17 +82,18 @@ void FileAnalysis(vector<string>& words, int search_time, int col, string st) {
     for (int i = 0; i < 32; i++) {
         fileOut << (char)(i + (int)('А')) << " : " << letters[i] << endl;
     }
-    fileOut.close();
+    fileOut.close(); // закрываем файл
 }
 
 int main()
 {
     SetConsoleCP(1251);
     SetConsoleOutputCP(1251);
-    string line, st;
+    string line, st, file;
     int col = 0;
     vector<string> words;
-    ifstream fin("Tekst1.txt"); // окрываем файл для чтения
+    cin >> file;
+    ifstream fin(file); // окрываем файл для чтения
     if (fin.is_open())
     {
         while (getline(fin, line))
@@ -101,7 +102,7 @@ int main()
         }
     }
     fin.close();     // закрываем файл
-    division_into_words(st, words, col);
+    division_into_words(st, words, col); // делим на слова и удаляем лишнее
     unsigned int start_time = clock(); // начальное время
     sort(words);
     unsigned int end_time = clock(); // конечное время
